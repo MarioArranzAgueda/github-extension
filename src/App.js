@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import FormUser from "./components/FormUser/FormUser";
+import GitHubUserPanel from "./components/GitHub/GitHubUserPanel";
+import GitHubReposPanel from "./components/GitHub/GitHubReposPanel";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userData: null,
+      repoData: null,
+    };
+  }
+
+  submit = async (values, { setSubmitting }) => {
+    this.getUser(values);
+    this.getRepositories(values);
+  };
+
+  getUser = async (values) => {
+    const response = await fetch(`https://api.github.com/users/${values.user}`);
+    const userData = await response.json();
+    this.setState({ userData: userData });
+  };
+
+  getRepositories = async (values) => {
+    const response = await fetch(`https://api.github.com/users/${values.user}`);
+    const repoData = await response.json();
+    this.setState({ repoData: repoData });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <header>
+          <h2>Github Panel</h2>
+        </header>
+        <section>
+          <FormUser initialValues={{ user: "" }} submit={this.submit} />
+        </section>
+        <section>
+          <GitHubUserPanel userData={this.state.userData} />
+          <GitHubReposPanel repoData={this.state.repoData} />
+        </section>
+      </div>
+    );
+  }
 }
-
-export default App;
