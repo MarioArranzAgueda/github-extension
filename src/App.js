@@ -1,49 +1,79 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./App.css";
 import FormUser from "./components/FormUser/FormUser";
-import GitHubUserPanel from "./components/GitHub/GitHubUserPanel";
-import GitHubReposPanel from "./components/GitHub/GitHubReposPanel";
+import { Toggle } from './components/Toggle/Toggle';
+import { lightTheme, darkTheme } from "./styles/theme";
+import { GlobalStyles } from "./styles/global";
+import { ThemeProvider } from 'styled-components';
+import { getUser, getRepositories, getFollowers, getActivity } from "./services/Github";
+import Repositories from './components/Repositories/Repositories';
+import UserInfo from './components/UserInfo/UserInfo';
+import ActivityFeed from './components/ActivityFeed/ActivityFeed';
+import Followers from './components/Followers/Followers';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userData: null,
-      repoData: null,
-    };
+export function App () {
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') ? localStorage.getItem('theme') : 'light' );
+  const [user, setUser] = useState(() => 
+    localStorage.getItem('user') ? localStorage.getItem('user') : ''
+  );
+  const [userData, setUserData] = useState([]);
+  const [repoData, setRepoData] = useState([]);
+  const [followersData, setFollowersData] = useState([]);
+  const [activity, setActivity] = useState([]);
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
+  useEffect(() => {
+    getUser(user).then((value) => {
+      setUserData(value)
+    });
+    getRepositories(user).then((value) => {
+      setRepoData(value)
+    });
+    getFollowers(user).then(value => {
+      setFollowersData(value)
+    })
+    getActivity(user).then(value => {
+      setActivity(value)
+    })
+  }, [user])
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      localStorage.setItem('theme', 'dark')
+      setTheme('dark');
+    } else {
+      localStorage.setItem('theme', 'light')
+      setTheme('light');
+    }
   }
 
-  submit = async (values, { setSubmitting }) => {
-    this.getUser(values);
-    this.getRepositories(values);
+  const submit = async (values, { setSubmitting }) => {
+    localStorage.setItem('user', values.user);
+    setUser(values.user);
   };
 
-  getUser = async (values) => {
-    const response = await fetch(`https://api.github.com/users/${values.user}`);
-    const userData = await response.json();
-    this.setState({ userData: userData });
-  };
+  return  (
+      <ThemeProvider theme={themeMode}>
+        {}
+        <GlobalStyles/>
+        <div className="App">
+          <header>
+            <h2>Github Panel</h2>
+            <Toggle theme={theme} toggleTheme={toggleTheme} />
+          </header>
+          <section>
+            <FormUser initialValues={{ user: "" }} submit={submit} />
+            <UserInfo userData={userData} repoData={repoData}/>
+          </section>
+          <section className="content">
+            <Followers followersData={followersData} />
+            <Repositories repositoryData={repoData} />
+          </section>
+          <section>
+            <ActivityFeed activityData={activity}/>
 
-  getRepositories = async (values) => {
-    const response = await fetch(`https://api.github.com/users/${values.user}`);
-    const repoData = await response.json();
-    this.setState({ repoData: repoData });
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <header>
-          <h2>Github Panel</h2>
-        </header>
-        <section>
-          <FormUser initialValues={{ user: "" }} submit={this.submit} />
-        </section>
-        <section>
-          <GitHubUserPanel userData={this.state.userData} />
-          <GitHubReposPanel repoData={this.state.repoData} />
-        </section>
-      </div>
+          </section>
+        </div>
+      </ThemeProvider>
     );
-  }
 }

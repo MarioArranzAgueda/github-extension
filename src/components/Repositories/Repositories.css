@@ -1,0 +1,20 @@
+.repositories-panel {
+    border-radius: 6px;
+    border: solid 1px;
+    display: flex;
+    flex-direction: column;
+    margin: 16px 8px;
+    height: 500px;
+    overflow: scroll;
+    padding: 16px;
+    width: calc(100% / 3);
+}
+
+.repository-element {
+    border-bottom: solid 1px silver;
+    padding: 16px 0px; 
+}
+
+.repository-element {
+    text-align: left;
+}
