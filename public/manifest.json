@@ -12,7 +12,5 @@
     "scripts": ["background.js"]
   },
   "content_security_policy": "script-src 'self' 'sha256-3kJrP+OsrgwTBa8zwPDox64Cf61+yyiE/0FQ+chgdpU='; object-src 'self'",
-  "permissions": [
-    "tabs"
-  ]
+  "permissions": ["tabs"]
 }

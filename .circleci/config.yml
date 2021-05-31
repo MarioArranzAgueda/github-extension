@@ -1,0 +1,59 @@
+jobs:
+  install:
+    executor:
+      name: node/default
+      tag: "12.18"
+    parameters:
+      before_install:
+        default:
+          - checkout
+        description: |
+          Steps to be executed before restoring cache and running install. Default is to run 'checkout' command.
+        type: steps
+    steps:
+      - steps: <<parameters.before_install>>
+      - restore_cache:
+          key: v1-node-modules-{{ checksum "package-lock.json" }}
+      - node/install-packages:
+          pkg-manager: npm
+      - persist_to_workspace:
+          paths:
+            - ./
+          root: ~/
+      - save_cache:
+          key: v1-node-modules-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/project/node_modules
+  test:
+    executor:
+      name: node/default
+      tag: "12.18"
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run test
+  build:
+    executor:
+      name: node/default
+      tag: "12.18"
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run build
+version: 2.1
+orbs:
+  node: circleci/node@4.0.0
+workflows:
+  catalog:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
