@@ -54,9 +54,9 @@ export function App() {
     }
   };
 
-  const submit = async (values, { setSubmitting }) => {
-    localStorage.setItem("user", values.user);
-    setUser(values.user);
+  const submit = async (value) => {
+    localStorage.setItem("user", value);
+    setUser(value);
   };
 
   return (
@@ -72,13 +72,18 @@ export function App() {
           <FormUser initialValues={{ user: "" }} submit={submit} />
           <UserInfo userData={userData} repoData={repoData} />
         </section>
-        <section className="content">
-          <Followers followersData={followersData} />
-          <Repositories repositoryData={repoData} />
-        </section>
-        <section>
-          <ActivityFeed activityData={activity} />
-        </section>
+          { user ?
+           <>
+            <section className="content" data-testid="content">
+              <Followers followersData={followersData} />
+              <Repositories repositoryData={repoData} />
+            </section>
+            <section>
+              <ActivityFeed activityData={activity} />
+            </section> 
+            </>
+            : null
+          }
       </div>
     </ThemeProvider>
   );

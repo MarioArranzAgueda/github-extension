@@ -36,7 +36,7 @@
 .circle{
   content: "";
   border: solid 1px;
-  border-color: none;
+  border: none;
   border-radius: 50%;
   display: inline-block;
   width: 10px;

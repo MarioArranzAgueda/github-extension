@@ -1,21 +1,27 @@
-import React from "react";
-import { Formik, Field, Form } from "formik";
+import React, {useState} from "react";
+import PropTypes from 'prop-types';
 
-function FormUser(props) {
+export default function FormUser({submit}) {
+  const [text, setText] = useState('');
+
+  const change = (event) => {
+    setText(event.target.value);
+  }
+
+  const click = () => {
+    submit(text);
+  }
+
   return (
     <div>
-      <Formik initialValues={props.initialValues} onSubmit={props.submit}>
-        {({ isSubmitting }) => (
-          <Form>
-            <Field type="text" name="user" />
-            <button type="submit" disabled={isSubmitting}>
-              Enviar
-            </button>
-          </Form>
-        )}
-      </Formik>
+      <input onChange={change} type="text" name="user" data-testid="user-input" />
+      <button onClick={click} type="submit" data-testid="user-button">
+        Enviar
+      </button>  
     </div>
   );
 }
 
-export default FormUser;
+FormUser.propTypes = {
+  submit: PropTypes.func.isRequired
+}
