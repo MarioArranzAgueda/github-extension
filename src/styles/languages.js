@@ -5,5 +5,5 @@ export const languageColor = {
     Python: "#3572A5",
     Shell: "",
     HTML: "",
-    ['Vim script']: "#199f4b"
+    'Vim script': "#199f4b"
 };
