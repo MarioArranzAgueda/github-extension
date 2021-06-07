@@ -7,6 +7,12 @@ This project allow us to install an extension in our chrome browser and open a n
 
 To install this project as extension, we need to execute next command:
 
+```bash
+npm install
+```
+
+You can run the application typing:
+
 ```shell 
 npm run build
 ```
