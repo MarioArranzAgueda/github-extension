@@ -15,6 +15,7 @@ import Repositories from "./components/Repositories/Repositories";
 import UserInfo from "./components/UserInfo/UserInfo";
 import ActivityFeed from "./components/ActivityFeed/ActivityFeed";
 import Followers from "./components/Followers/Followers";
+import SettingsPanel from "./components/SettingsPanel/SettingsPanel";
 
 export function App() {
   const [theme, setTheme] = useState(() =>
@@ -54,6 +55,11 @@ export function App() {
     }
   };
 
+  const closeSession = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  }
+
   const submit = async (value) => {
     localStorage.setItem("user", value);
     setUser(value);
@@ -68,12 +74,19 @@ export function App() {
           <h2>Github Panel</h2>
           <Toggle theme={theme} toggleTheme={toggleTheme} />
         </header>
-        <section>
-          <FormUser initialValues={{ user: "" }} submit={submit} />
-          <UserInfo userData={userData} repoData={repoData} />
-        </section>
+        {!user && 
+          <section>
+            <FormUser initialValues={{ user: "" }} submit={submit} />
+          </section>
+        }
           { user ?
            <>
+           <section>
+             <SettingsPanel closeSession={closeSession}/>
+           </section>
+           <section>
+              <UserInfo userData={userData} repoData={repoData} />
+           </section>
             <section className="content" data-testid="content">
               <Followers followersData={followersData} />
               <Repositories repositoryData={repoData} />

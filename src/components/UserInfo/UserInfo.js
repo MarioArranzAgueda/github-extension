@@ -8,7 +8,7 @@ export default function UserInfo({ userData, repoData }) {
     <div className="user-info">
       <div className="image-profile">
         {avatar_url ? (
-          <a href={url}>
+          <a href={`https://github.com/${login}`} target="_blank">
             <img src={avatar_url} alt="url" />
           </a>
         ) : null}
