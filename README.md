@@ -7,6 +7,12 @@ This project allow us to install an extension to open a tab with our Github user
 
 To install this project as extension, we need to execute next command:
 
+```bash
+npm install
+```
+
+You can run the application typing:
+
 ```shell 
 npm install
 
