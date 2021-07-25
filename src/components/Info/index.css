@@ -1,0 +1,32 @@
+.Info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Info .Clock,
+.City,
+.Weather {
+  font-weight: bold;
+  font-family: 'Roboto';
+}
+
+.Info .Clock {
+  font-size: 64px;
+}
+
+.Info .City {
+  font-size: 32px;
+}
+
+.Info .Weather {
+  font-size: 24px;
+}
+
+.Info .Weather input {
+  border-radius: 8px;
+}
+
+.Info .Weather button {
+  border-radius: 8px;
+}

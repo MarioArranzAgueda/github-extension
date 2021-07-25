@@ -1,40 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { FiSettings } from 'react-icons/fi';
-import { Overlay, Popover } from 'react-bootstrap';
+import { Popover } from 'react-bootstrap';
 import './SettingsPanel.css';
 
-export default function SettingsPanel({closeSession}) {
-  const [target, setTarget] = useState(null);
-  const [show, setShow] = useState(false);
-  const ref = useRef(null);
-
-  const openSettings = (event) => {
-    setShow(!show);
-    setTarget(event.target);
-  };
+export default function SettingsPanel({ closeSession }) {
 
   const logOut = () => {
-      closeSession();
-  }
+    closeSession();
+  };
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3">Popover right</Popover.Header>
+      <Popover.Body>
+        <span onClick={logOut}>Cerrar sesión</span>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <header className="top-header">
-      <FiSettings onClick={openSettings} />
+      {/* <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+        <FiSettings/>
+      </OverlayTrigger> */}
 
-      <Overlay
-        show={show}
-        target={target}
-        placement="bottom"
-        container={ref.current}
-        containerPadding={20}
-      >
-        <Popover title="Configuración" id="popover-contained">
-          <Popover.Title as="h3">Popover bottom</Popover.Title>
-          <Popover.Content>
-            <span onClick={logOut}>Cerrar sesión</span>
-          </Popover.Content>
-        </Popover>
-      </Overlay>
     </header>
   );
 }
